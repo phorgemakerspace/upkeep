@@ -1,4 +1,4 @@
-(Will add logo here)
+![Logo](https://raw.githubusercontent.com/phorgemakerspace/upkeep/refs/heads/main/src/client/static/upkeep.png)
 # UpKeep (Machine Maintainance Tracking Tool)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)  

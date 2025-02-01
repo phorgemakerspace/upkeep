@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  sveltekit-app:
+    image: my-sveltekit-app # Replace with your actual image name
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - sqlite_data:/app/data # Ensure SQLite data is stored persistently
+    restart: unless-stopped # Restart policy to keep the container running
+    environment:
+      - NODE_ENV=production # Set environment variable for production mode
+
+volumes:
+  sqlite_data: # Define volume for persistent SQLite storage

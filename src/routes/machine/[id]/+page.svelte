@@ -29,8 +29,11 @@
     async function generateQRCode() {
         if (!machine) return;
 
+        // const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5173";
         const baseUrl =
-            import.meta.env.VITE_BASE_URL || "http://localhost:5173";
+            typeof window !== "undefined"
+                ? window.location.origin
+                : "http://localhost:3000";
         const logUrl = `${baseUrl}/log/${machine.id}`; // Creates URL like http://localhost:3000/log/123
 
         try {
@@ -138,23 +141,25 @@
             {#if !isEditing}
                 <button
                     on:click={startEditing}
-                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    class="mr-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                     Edit Machine
                 </button>
             {:else}
-                <button
-                    on:click={cancelEditing}
-                    class="px-4 py-2 border rounded hover:bg-gray-50"
-                >
-                    Cancel
-                </button>
-                <button
-                    on:click={saveMachine}
-                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                    Save
-                </button>
+                <div>
+                    <button
+                        on:click={cancelEditing}
+                        class="mr-2 px-4 py-2 border rounded hover:bg-gray-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        on:click={saveMachine}
+                        class="mr-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Save
+                    </button>
+                </div>
             {/if}
         </div>
 

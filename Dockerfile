@@ -1,62 +1,33 @@
-# Dockerfile
-FROM node:20-alpine
+# Use a lightweight Node.js base image
+FROM node:alpine3.20 AS builder
 
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-COPY src/client/package*.json src/client/
-COPY src/client/tailwind.config.js src/client/
-COPY src/client/postcss.config.js src/client/
-
 # Install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy source code
+# Copy the rest of the app and build it
 COPY . .
+RUN npm run build
 
-# Build client
-RUN cd src/client && npm install && npm run build
+# Use a clean Node.js image for production
+FROM node:alpine3.20
 
-# Expose ports
-EXPOSE 3000
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy built files from the builder stage
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+
+# Ensure database folder exists
+RUN mkdir -p /app/data
+
+# Expose the port SvelteKit runs on
 EXPOSE 5173
 
-CMD ["npm", "start"]
-
-# docker-compose.yml
-# version: '3.8'
-
-# services:
-#   app:
-#     build: .
-#     ports:
-#       - "3000:3000"
-#       - "5173:5173"
-#     environment:
-#       - DB_HOST=db
-#       - DB_USER=${DB_USER}
-#       - DB_PASSWORD=${DB_PASSWORD}
-#       - DB_NAME=${DB_NAME}
-#     depends_on:
-#       - db
-#     volumes:
-#       - .:/app
-#       - /app/node_modules
-
-#   db:
-#     image: mariadb:latest
-#     ports:
-#       - "3306:3306"
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-#       - MYSQL_DATABASE=${DB_NAME}
-#       - MYSQL_USER=${DB_USER}
-#       - MYSQL_PASSWORD=${DB_PASSWORD}
-#     volumes:
-#       - db_data:/var/lib/mysql
-#       - ./src/server/db/migrations:/docker-entrypoint-initdb.d
-
-# volumes:
-#   db_data:
+# Start the SvelteKit app
+CMD ["node", "build"]

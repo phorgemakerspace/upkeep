@@ -1,8 +1,12 @@
 import Database from 'better-sqlite3';
 import { json } from '@sveltejs/kit'
+import path from 'path';
 
+const dbPath = process.env.NODE_ENV === 'production'
+    ? '/app/data/database.db' // Docker production path
+    : path.join(process.cwd(), 'data', 'database.db'); // Local development path
 // Open a SQLite database (it creates `database.db` if it doesn’t exist)
-const db = new Database('./database.db', { verbose: console.log });
+const db = new Database(dbPath);
 
 // Initialize the database (ensures the tables exist)
 db.exec(`

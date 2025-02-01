@@ -2,15 +2,13 @@
     // @ts-nocheck
     export let data;
     let machine = data.machine;
-    // let machine;
-    // let user = localStorage.getItem("user") || "";
-    let user_name = "spencer@phorgemakerspace.com";
+    let user_name = window.localStorage.getItem("user_name") || "";
     let usage_time = 0;
 
     async function logUsage() {
         if (!user_name || !usage_time) return;
 
-        // localStorage.setItem("user", user_name);
+        window.localStorage.setItem("user_name", user_name);
 
         const response = await fetch(`/api/log/${data.machine.id}`, {
             method: "POST",

@@ -14,7 +14,7 @@ A web-based equipment tracking system designed for makerspaces, hackerspaces, an
 ✅ **Machine Details Page** – View specific machine details, including a usage log.  
 ✅ **QR Code Access** – Each machine has a QR code for easy log access.  
 ✅ **Machine Management** – Add, edit, reset usage hours, or delete machines.  
-✅ **Docker Support** – Easy deployment using [Docker](https://hub.docker.com/repository/docker/kodaxx/upkeep/general). 
+✅ **Docker Support** – Easy deployment using [Docker](https://hub.docker.com/r/kodaxx/upkeep). 
 
 ### Upcoming Features  
 🔒 **User Authentication** – Secure login system for users.  

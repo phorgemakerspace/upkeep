@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ command }) => {
 	// Set environment variable based on build mode
 	process.env.NODE_ENV = command === 'build' ? 'production' : 'development';
+	// process.env.DOCKER = command === 'build' ? true : false;
 
 	return {
 		plugins: [sveltekit()],

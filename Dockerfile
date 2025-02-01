@@ -1,19 +1,27 @@
 # Use a lightweight Node.js base image
-FROM node:alpine3.20 AS builder
+FROM node:bullseye AS builder
+
+# Install necessary build tools for better-sqlite3
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Set working directory inside the container
 WORKDIR /app
 
+# Ensure database folder exists
+RUN mkdir -p /app/data
+
 # Install dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --build-from-source
 
 # Copy the rest of the app and build it
 COPY . .
+
+RUN npm rebuild better-sqlite3 --build-from-source
 RUN npm run build
 
 # Use a clean Node.js image for production
-FROM node:alpine3.20
+FROM node:bullseye
 
 # Set working directory inside the container
 WORKDIR /app

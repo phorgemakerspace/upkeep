@@ -20,6 +20,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-node": "^5.2.12",
 		"better-sqlite3": "^11.8.1",
 		"dotenv": "^16.4.7",
 		"qrcode": "^1.5.4"

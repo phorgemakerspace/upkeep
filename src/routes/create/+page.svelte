@@ -65,8 +65,10 @@
                     bind:value={newMachine.category}
                     class="w-full p-2 border rounded"
                 >
-                    <option value="3D Printer">3D Printer</option>
-                    <option value="CNC Machine">CNC Machine</option>
+                    <option value="3D Printer">3D Printers</option>
+                    <option value="Laser Cutter">Laser Cutters</option>
+                    <option value="CNC Machines">CNC Machines</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 

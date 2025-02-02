@@ -1,16 +1,17 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  sveltekit-app:
-    image: upkeep
-    build: .
+  upkeep:
+    image: kodaxx/upkeep:latest
+    container_name: upkeep
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
-      - sqlite_data:/app/data # Ensure SQLite data is stored persistently
-    restart: unless-stopped
+      - /mnt/user/appdata/upkeep:/app/data
     environment:
-      - NODE_ENV=production # Set environment variable for production mode
-
-volumes:
-  sqlite_data: # Define volume for persistent SQLite storage
+      - TZ=America/Denver # Adjust to your timezone
+      - PUID=99 # Default Unraid user ID
+      - PGID=100 # Default Unraid group ID
+      - UMASK=002 # Default Unraid umask
+    network_mode: bridge

@@ -1,9 +1,14 @@
 <script>
     // @ts-nocheck
+    import { onMount } from "svelte";
     export let data;
     let machine = data.machine;
-    let user_name = window.localStorage.getItem("user_name") || "";
+    let user_name = "";
     let usage_time = 0;
+
+    onMount(() => {
+        user_name = window.localStorage.getItem("user_name") || "";
+    });
 
     async function logUsage() {
         if (!user_name || !usage_time) return;

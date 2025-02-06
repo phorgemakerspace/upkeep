@@ -1,4 +1,5 @@
 import Database from 'better-sqlite3';
+import { DateTime } from "luxon";
 import { json } from '@sveltejs/kit';
 import path from 'path';
 import fs from 'fs';
@@ -37,8 +38,23 @@ export const GET = async ({ params, url }) => {
     const machineId = parseInt(params.id);
     const limit = url.searchParams.get('limit') || 10; // Default to 10 logs if no limit specified
 
+    // Get the timezone from the environment variable
+    const tz = process.env.TZ;
+
+    console.log(process.env.TZ)
+
     // Retrieve usage logs with a limit
     const logs = db.prepare('SELECT * FROM usage_logs WHERE machine_id = ? ORDER BY timestamp DESC LIMIT ?').all(machineId, limit);
 
-    return new Response(JSON.stringify(logs), { status: 200 });
+    // Convert timestamps only if TZ is set
+    const adjustedLogs = logs.map(log => {
+        if (tz && log.timestamp) {
+            log.timestamp = DateTime.fromSQL(log.timestamp, { zone: "UTC" }) // Parse as UTC
+                .setZone(tz) // Convert to specified timezone
+                .toFormat("yyyy-MM-dd HH:mm:ss"); // Format as "YYYY-MM-DD HH:mm:ss"
+        }
+        return log;
+    });
+
+    return new Response(JSON.stringify(adjustedLogs), { status: 200 });
 };

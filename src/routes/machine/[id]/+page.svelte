@@ -2,7 +2,7 @@
     // @ts-nocheck
 
     import { onMount } from "svelte";
-
+    import { isMobile } from "$lib/stores.js";
     import QRCode from "qrcode";
 
     export let data;
@@ -141,23 +141,35 @@
             {#if !isEditing}
                 <button
                     on:click={startEditing}
-                    class="mr-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    class="bg-blue-500 px-3 py-2 border rounded hover:bg-blue-600"
                 >
-                    Edit Machine
+                    <img
+                        src="/edit.svg"
+                        class="w-[25px] filter invert"
+                        alt="edit"
+                    />
                 </button>
             {:else}
                 <div>
                     <button
                         on:click={cancelEditing}
-                        class="mr-2 px-4 py-2 border rounded hover:bg-gray-50"
+                        class="bg-red-500 px-3 py-2 border rounded hover:bg-red-600"
                     >
-                        Cancel
+                        <img
+                            src="/cancel.svg"
+                            class="w-[25px] filter invert"
+                            alt="cancel"
+                        />
                     </button>
                     <button
                         on:click={saveMachine}
-                        class="mr-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        class="bg-green-500 px-3 py-2 rounded hover:bg-green-600"
                     >
-                        Save
+                        <img
+                            src="/save.svg"
+                            class="w-[25px] filter invert"
+                            alt="save"
+                        />
                     </button>
                 </div>
             {/if}
@@ -258,18 +270,26 @@
                                         class="w-full p-2 border rounded"
                                     />
                                 </div>
-                                <div class="mt-6 flex justify-center space-x-4">
+                                <div class="mt-6 flex justify-center space-x-1">
                                     <button
                                         on:click={deleteMachine}
-                                        class="bg-red-500 px-4 text-white px-4 py-2 rounded hover:bg-red-600"
+                                        class="bg-red-500 px-3 py-2 border rounded hover:bg-red-600"
                                     >
-                                        Delete
+                                        <img
+                                            src="/delete.svg"
+                                            class="w-[25px] filter invert"
+                                            alt="delete"
+                                        />
                                     </button>
                                     <button
                                         on:click={resetMachine}
-                                        class="bg-yellow-500 px-4 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                                        class="bg-yellow-500 px-3 py-2 border rounded hover:bg-yellow-600"
                                     >
-                                        Reset
+                                        <img
+                                            src="/reset.svg"
+                                            class="w-[25px] filter invert"
+                                            alt="reset"
+                                        />
                                     </button>
                                 </div>
                             </div>
@@ -383,25 +403,27 @@
                 <!-- Third column for QR code -->
                 <div class="flex flex-col items-center justify-start">
                     <!-- <h3 class="font-medium text-gray-500">Machine QR Code</h3> -->
-                    {#if qrCodeDataUrl}
-                        <img
-                            src={qrCodeDataUrl}
-                            alt="Machine QR Code"
-                            class="mb-4"
-                        />
-                        <button
-                            on:click={downloadQRCode}
-                            class="bg-green-500 text-white px-4 py-2 w-3/4 rounded hover:bg-green-600"
-                        >
-                            Download QR Code
-                        </button>
-                        <a
-                            href="/log/{machine.id}"
-                            class="bg-blue-500 text-white text-center px-4 py-2 m-4 w-3/4 rounded hover:bg-blue-600"
-                        >
-                            Log Usage
-                        </a>
+                    {#if !$isMobile}
+                        {#if qrCodeDataUrl}
+                            <img
+                                src={qrCodeDataUrl}
+                                alt="Machine QR Code"
+                                class="mb-4"
+                            />
+                            <button
+                                on:click={downloadQRCode}
+                                class="bg-green-500 text-white px-4 py-2 w-3/4 rounded hover:bg-green-600"
+                            >
+                                Download QR Code
+                            </button>
+                        {/if}
                     {/if}
+                    <a
+                        href="/log/{machine.id}"
+                        class="bg-blue-500 text-white text-center px-4 py-2 m-4 w-3/4 rounded hover:bg-blue-600"
+                    >
+                        Log Usage
+                    </a>
                 </div>
             </div>
         </div>

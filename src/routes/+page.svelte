@@ -1,5 +1,7 @@
 <script>
     // @ts-nocheck
+    import { isMobile } from "$lib/stores.js";
+
     export let data;
 
     let machines = data.machines;
@@ -94,8 +96,8 @@
         <h1 class="text-3xl font-bold">Equipment Status</h1>
         <a
             href="/create"
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >Create New</a
+            class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
+            ><img src="/add.svg" class="w-[25px] filter invert" alt="add" /></a
         >
     </div>
 
@@ -141,10 +143,19 @@
                         <thead>
                             <tr class="bg-gray-50">
                                 <th class="text-left p-3 border-b">Machine</th>
-                                <th class="text-left p-3 border-b">Current</th>
-                                <th class="text-left p-3 border-b">Limit</th>
+                                {#if !$isMobile}
+                                    <th class="text-left p-3 border-b"
+                                        >Current</th
+                                    >
+                                    <th class="text-left p-3 border-b">Limit</th
+                                    >
+                                {/if}
                                 <th class="text-left p-3 border-b">Usage</th>
-                                <th class="text-left p-3 border-b">Status</th>
+                                {#if !$isMobile}
+                                    <th class="text-left p-3 border-b"
+                                        >Status</th
+                                    >
+                                {/if}
                             </tr>
                         </thead>
                         <tbody>
@@ -157,15 +168,25 @@
                                             >
                                         </div>
                                     </td>
+                                    {#if !$isMobile}
+                                        <td class="p-3">
+                                            {machine.current_usage}
+                                            {machine.unit_type}
+                                        </td>
+                                        <td class="p-3">
+                                            {machine.maintenance_interval}
+                                            {machine.unit_type}
+                                        </td>
+                                    {/if}
                                     <td class="p-3">
-                                        {machine.current_usage}
-                                        {machine.unit_type}
-                                    </td>
-                                    <td class="p-3">
-                                        {machine.maintenance_interval}
-                                        {machine.unit_type}
-                                    </td>
-                                    <td class="p-3">
+                                        {#if $isMobile}
+                                            <div
+                                                class="text-xs text-gray-600 mb-1"
+                                            >
+                                                {machine.current_usage}/{machine.maintenance_interval}
+                                                {machine.unit_type}
+                                            </div>
+                                        {/if}
                                         <div
                                             class="w-full bg-gray-200 rounded-full h-2.5 mb-1"
                                         >
@@ -178,20 +199,23 @@
                                             {machine.usagePercentage}%
                                         </div>
                                     </td>
-                                    <td class="p-3">
-                                        <span
-                                            class={`px-2 py-1 rounded text-sm ${getStatusStyle(machine.usagePercentage)}`}
-                                        >
-                                            {Number(machine.usagePercentage) >=
-                                            100
-                                                ? "Maintenance Required"
-                                                : Number(
-                                                        machine.usagePercentage,
-                                                    ) >= 80
-                                                  ? "Warning"
-                                                  : "Healthy"}
-                                        </span>
-                                    </td>
+                                    {#if !$isMobile}
+                                        <td class="p-3">
+                                            <span
+                                                class={`px-2 py-1 rounded text-sm ${getStatusStyle(machine.usagePercentage)}`}
+                                            >
+                                                {Number(
+                                                    machine.usagePercentage,
+                                                ) >= 100
+                                                    ? "Maintenance Required"
+                                                    : Number(
+                                                            machine.usagePercentage,
+                                                        ) >= 80
+                                                      ? "Warning"
+                                                      : "Healthy"}
+                                            </span>
+                                        </td>
+                                    {/if}
                                 </tr>
                             {/each}
                         </tbody>

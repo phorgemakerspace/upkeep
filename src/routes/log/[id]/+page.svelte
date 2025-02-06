@@ -5,6 +5,7 @@
     let machine = data.machine;
     let user_name = "";
     let usage_time = 0;
+    let trained = false;
 
     onMount(() => {
         user_name = window.localStorage.getItem("user_name") || "";
@@ -105,10 +106,26 @@
                 />
             </div>
 
+            <div class="mb-4 ml-0">
+                <input
+                    id="training"
+                    type="checkbox"
+                    bind:checked={trained}
+                    class="mr-2 ml-1 transform scale-150"
+                />
+                <label for="training" class="mb-4 text-xs">
+                    I acknowledge that I am properly trained and authorized to
+                    operate this machine.
+                </label>
+            </div>
+
             <button
                 on:click={logUsage}
-                class="bg-blue-500 text-white px-4 py-2 w-full rounded hover:bg-blue-600"
-                disabled={!user_name || !usage_time || needsMaintenance}
+                class="bg-blue-500 text-white px-4 py-2 w-full rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:text-gray-700 disabled:cursor-not-allowed"
+                disabled={!user_name ||
+                    !usage_time ||
+                    needsMaintenance ||
+                    !trained}
             >
                 Log Usage
             </button>
@@ -140,7 +157,7 @@
         </div>
         <div class="mt-8 text-center">
             <a
-                href="mailto:manager@phorgemakerspace.com"
+                href="mailto:manager@phorgemakerspace.com?subject=Machine%20Issue%20Report&body=Machine%20Name%2FID%3A%20%0AMachine%20Category%3A%20%0A%0AIssue%20Description%3A%20%0A%0A- Problem%20Summary%3A%20%5BBrief%20description%20of%20the%20issue%2C%20e.g.%2C%20%22The%203D%20printer%20is%20not%20heating%20up.%22%5D%0A%0A- Detailed%20Description%3A%20%5BMore%20detailed%20explanation%20of%20the%20issue.%20Include%20any%20unusual%20noises%2C%20behaviors%2C%20or%20error%20messages%20that%20appeared.%5D%0A%0A- When%20did%20the%20issue%20occur%3F%20%5BDate%20and%20time%20the%20problem%20started%20or%20was%20first%20noticed%5D%0A%0A- Steps%20Taken%20%28if%20any%29%3A%20%5BAny%20troubleshooting%20steps%20you%20have%20already%20attempted%2C%20such%20as%20restarting%20the%20machine%20or%20adjusting%20settings.%5D%0A%0A- Machine%20Status%3A%20%5BCurrent%20status%20of%20the%20machine%2C%20e.g.%2C%20%22Machine%20is%20powered%20on%20but%20not%20responding.%22%5D%0A%0A- Additional%20Information%3A%20"
                 class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             >
                 Report Issue
